@@ -16,7 +16,7 @@ const routes = (handler) => [
   },
   {
     method: 'GET',
-    path: '/albums/{id}/covers/{param*}',
+    path: '/albums/{id}/{param*}',
     handler: {
       directory: {
         path: path.resolve(__dirname, 'file'),

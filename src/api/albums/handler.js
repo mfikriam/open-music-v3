@@ -1,4 +1,5 @@
 const autoBind = require('auto-bind');
+const config = require('../../utils/config');
 
 class AlbumsHandler {
   constructor(service, validator) {
@@ -11,9 +12,7 @@ class AlbumsHandler {
   async postAlbumHandler(request, h) {
     this._validator.validateAlbumPayload(request.payload);
 
-    const albumId = await this._service.addAlbum(
-      request.payload,
-    );
+    const albumId = await this._service.addAlbum(request.payload);
 
     const response = h.response({
       status: 'success',
@@ -30,10 +29,13 @@ class AlbumsHandler {
   async getAlbumByIdHandler(request) {
     const { id } = request.params;
     const album = await this._service.getAlbumById(id);
-    const songs = await this._service.getSongsByAlbumId(
-      album.id,
-    );
+    const songs = await this._service.getSongsByAlbumId(album.id);
     album.songs = songs;
+
+    album.coverUrl = album.cover;
+    if (album.cover) {
+      album.coverUrl = `http://${config.app.host}:${config.app.port}/albums/${id}/covers/${album.cover}`;
+    }
 
     return {
       status: 'success',

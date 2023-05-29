@@ -16,7 +16,7 @@ class UploadsHandler {
 
     // ? remove old cover if album already have cover
     const { cover: oldfilename } = await this._albumsService.getAlbumById(id);
-    if (oldfilename != null) {
+    if (oldfilename) {
       await this._storageService.deleteFile(oldfilename);
     }
 
