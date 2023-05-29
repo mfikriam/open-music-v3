@@ -1,9 +1,9 @@
 const autoBind = require('auto-bind');
-const config = require('../../utils/config');
 
 class UploadsHandler {
-  constructor(service, validator) {
-    this._service = service;
+  constructor(storageService, albumsService, validator) {
+    this._storageService = storageService;
+    this._albumsService = albumsService;
     this._validator = validator;
 
     autoBind(this);
@@ -11,16 +11,22 @@ class UploadsHandler {
 
   async postUploadCoverHandler(request, h) {
     const { cover } = request.payload;
+    const { id } = request.params;
     this._validator.validateImageHeaders(cover.hapi.headers);
 
-    const filename = await this._service.writeFile(cover, cover.hapi);
+    // ? remove old cover if album already have cover
+    const { cover: oldfilename } = await this._albumsService.getAlbumById(id);
+    if (oldfilename != null) {
+      await this._storageService.deleteFile(oldfilename);
+    }
 
-    const fileLocation = `http://${config.app.host}:${config.app.port}/upload/images/${filename}`;
-    console.log(fileLocation);
+    // ? write file
+    const filename = await this._storageService.writeFile(cover, cover.hapi);
+    await this._albumsService.editCoverAlbumById(id, filename);
 
     const response = h.response({
       status: 'success',
-      message: 'Cover album berhasil diupload',
+      message: 'Sampul berhasil diunggah',
     });
     response.code(201);
 
