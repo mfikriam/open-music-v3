@@ -19,7 +19,6 @@ class ExportsHandler {
 
     const message = {
       playlistId,
-      userId,
       targetEmail: request.payload.targetEmail,
     };
 
