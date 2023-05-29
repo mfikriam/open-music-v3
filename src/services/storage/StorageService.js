@@ -24,7 +24,6 @@ class StorageService {
 
   deleteFile(filename) {
     const path = `${this._folder}/${filename}`;
-    console.log(`path delete: ${path}`);
 
     return new Promise((resolve, reject) => {
       fs.unlink(path, (error) => {
