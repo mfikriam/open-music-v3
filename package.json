@@ -1,7 +1,7 @@
 {
   "name": "open-music-v3",
   "version": "1.0.0",
-  "description": "Proyek Authentication, Authorization, dan Normalisasi Database for Dicoding Submission",
+  "description": "Proyek Message Broker, Storage, dan Cache for Dicoding Submission",
   "main": "index.js",
   "scripts": {
     "start-prod": "node ./src/server.js",
